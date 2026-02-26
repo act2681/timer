@@ -142,6 +142,7 @@ async function submitScoreToAPI() {
   
   const playerData = {
     name: state.playerName,
+    deviceId: state.deviceId, 
     level: state.level,
     minutes: Math.floor(state.totalStudyMinutes),
     streak: state.streak,
@@ -235,8 +236,16 @@ async function renderLeaderboard() {
 }
 
 // ============ Initialize ============
+// ============ Initialize ============
 function init() {
   loadFromStorage();
+  
+  // ✨ สร้าง Device ID ถ้ายูสเซอร์นี้ยังไม่เคยมี
+  if (!state.deviceId) {
+    state.deviceId = 'player_' + Math.random().toString(36).substr(2, 9);
+    saveToStorage();
+  }
+
   updateTimerSettings();
   renderSessionTracker();
   updateDisplay();
