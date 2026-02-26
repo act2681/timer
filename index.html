@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎮 Study Battle Timer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="bg-animation" id="bgAnimation"></div>
+
+  <div class="container">
+    <div class="header">
+      <div class="title">⚔️ STUDY BATTLE</div>
+      <div class="level-badge" id="levelBadge">LV 1</div>
+    </div>
+
+    <div class="menu-buttons">
+      <button class="menu-btn" onclick="openBattleArena()">🏆 ชิงอันดับ</button>
+      <button class="menu-btn" onclick="openThemes()">🎨 ธีม</button>
+      <button class="menu-btn" onclick="shareScore()">📤 แชร์</button>
+    </div>
+
+    <div class="xp-container">
+      <div class="xp-label">
+        <span>⚡ POWER LEVEL</span>
+        <span id="xpText">0 / 100</span>
+      </div>
+      <div class="xp-bar">
+        <div class="xp-fill" id="xpFill" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value" id="totalSessions">0</div>
+        <div class="stat-label">รอบ</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="totalMinutes">0</div>
+        <div class="stat-label">นาที</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="streak">0</div>
+        <div class="stat-label">🔥 Combo</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="rank">-</div>
+        <div class="stat-label">อันดับ</div>
+      </div>
+    </div>
+
+    <div class="time-settings">
+      <div class="setting-row">
+        <div class="setting-label">
+          <span>📚</span>
+          <span>เวลาเรียน (นาที)</span>
+        </div>
+        <input type="number" class="time-input" id="focusTime" min="1" max="120" value="25">
+      </div>
+      <div class="setting-row">
+        <div class="setting-label">
+          <span>☕</span>
+          <span>เวลาพัก (นาที)</span>
+        </div>
+        <input type="number" class="time-input" id="breakTime" min="1" max="30" value="5">
+      </div>
+      <div class="setting-row">
+        <div class="setting-label">
+          <span>⏱️</span>
+          <span>รอบทั้งหมด</span>
+        </div>
+        <input type="number" class="time-input" id="totalRounds" min="1" max="20" value="4">
+      </div>
+    </div>
+
+    <div class="session-tracker" id="sessionTracker"></div>
+
+    <div class="timer-display">
+      <span class="mode-emoji" id="modeEmoji">⚔️</span>
+      <div class="timer-circle-container">
+        <svg class="timer-circle" width="240" height="240">
+          <defs>
+            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#ff6b9d;stop-opacity:1" />
+              <stop offset="50%" style="stop-color:#ffd93d;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#6BCF7F;stop-opacity:1" />
+            </linearGradient>
+          </defs>
+          <circle class="timer-bg" cx="120" cy="120" r="110"></circle>
+          <circle class="timer-progress" id="timerProgress" cx="120" cy="120" r="110"></circle>
+        </svg>
+        <div class="timer-text" id="timerText">25:00</div>
+      </div>
+      <div class="mode-text" id="modeText">พร้อมเรียน!</div>
+    </div>
+
+    <div class="controls">
+      <button class="btn btn-primary" id="startBtn" onclick="toggleTimer()">
+        ▶️ สู้!
+      </button>
+      <button class="btn btn-secondary" onclick="resetTimer()">
+        🔄 รีเซ็ต
+      </button>
+    </div>
+
+    <div class="quote-box" id="quoteBox">
+      <div class="quote-text"></div>
+      <div class="quote-author"></div>
+    </div>
+  </div>
+
+  <div class="modal" id="battleModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">⚔️ กระดานผู้นำ</h2>
+        <button class="close-btn" onclick="closeBattleArena()">×</button>
+      </div>
+
+      <div class="battle-input-section">
+        <input 
+          type="text" 
+          class="battle-input" 
+          id="playerNameInput" 
+          placeholder="ใส่ชื่อของคุณ..."
+          maxlength="20"
+        >
+        <button class="share-btn" onclick="submitScore()">
+          🚀 ส่งคะแนนแข่งขัน!
+        </button>
+      </div>
+
+      <div style="margin-top: 25px;">
+        <h3 style="color: #ff6b9d; margin-bottom: 15px; font-size: 1.3rem;">🏆 TOP Student</h3>
+        <div id="leaderboardList"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="themesModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">🎨 เลือกธีมของคุณ</h2>
+        <button class="close-btn" onclick="closeThemes()">×</button>
+      </div>
+      <div class="themes" id="themesContainer"></div>
+    </div>
+  </div>
+
+  <div class="achievement-popup" id="achievementPopup">
+    <div class="achievement-icon" id="achievementIcon">🏆</div>
+    <h2 class="achievement-title" id="achievementTitle">ยินดีด้วย!</h2>
+    <p class="achievement-desc" id="achievementDesc">คุณทำได้!</p>
+  </div>
+
+  <audio id="timerSound" preload="auto">
+    <source src="sounds/timer.mp3" type="audio/mpeg">
+  </audio>
+
+  <script src="script.js"></script>
+</body>
+</html>
