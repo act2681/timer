@@ -1,5 +1,5 @@
 // ============ Configuration ============
-const API_URL = 'https://study-worker-api.annmaxact.workers.dev/'; // จะใส่ทีหลังหลังสร้าง Cloudflare Worker
+const API_URL = 'https://study-worker-api.annmaxact.workers.dev'; // จะใส่ทีหลังหลังสร้าง Cloudflare Worker
 
 let FOCUS_TIME = 25 * 60;
 let BREAK_TIME = 5 * 60;
