@@ -98,6 +98,7 @@ let state = {
   unlockedThemes: ['default'],
   currentTheme: 'default',
   playerName: '',
+  deviceId: '',
   rank: 0
 };
 
